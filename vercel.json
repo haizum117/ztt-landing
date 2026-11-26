@@ -1,9 +1,20 @@
 {
   "cleanUrls": true,
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/start",
-      "destination": "/index.html"
+      "source": "/tt",
+      "destination": "/?utm_source=tiktok&utm_medium=bio&utm_campaign=stealth_s1",
+      "permanent": false
+    },
+    {
+      "source": "/ig",
+      "destination": "/?utm_source=ig_reels&utm_medium=bio&utm_campaign=stealth_s1",
+      "permanent": false
+    },
+    {
+      "source": "/yt",
+      "destination": "/?utm_source=yt_shorts&utm_medium=bio&utm_campaign=stealth_s1",
+      "permanent": false
     }
   ],
   "headers": [

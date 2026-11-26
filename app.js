@@ -396,6 +396,7 @@
 
       const payload = {
         email,
+        os: detectedOS,
         platform: "ios",
         detected_os: detectedOS,
         utm_source: utms.utm_source,
