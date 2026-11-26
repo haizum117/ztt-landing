@@ -26,7 +26,7 @@
   --slate-dim: #64748b;
 
   --font-ui: "Bahnschrift", "Inter", system-ui, -apple-system, sans-serif;
-  --font-display: "Arial Black", "Impact", system-ui, sans-serif;
+  --font-display: "Arial Black", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
 
   --radius-card: 18px;
   --radius-control: 13px;
@@ -53,6 +53,7 @@ body {
 }
 
 body {
+  position: relative;
   min-height: 100dvh;
   background-image:
     radial-gradient(ellipse 85% 42% at 50% -6%, rgba(212, 175, 55, 0.09), transparent 68%),
@@ -61,6 +62,17 @@ body {
   background-attachment: fixed;
   display: flex;
   justify-content: center;
+}
+
+/* Subtle inline-SVG micro-grain to eliminate AMOLED dark-gradient color banding */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
 }
 
 [hidden] {
@@ -81,17 +93,31 @@ body {
 
 /* Main Single-Viewport Stage (9:16 Mobile Priority) */
 .stage {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 430px;
   min-height: 100dvh;
   padding:
-    max(clamp(14px, 2.6dvh, 26px), env(safe-area-inset-top))
+    max(clamp(12px, 2.2dvh, 24px), env(safe-area-inset-top))
     16px
-    max(clamp(12px, 2dvh, 22px), env(safe-area-inset-bottom));
+    max(clamp(10px, 1.8dvh, 20px), env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: clamp(10px, 2dvh, 18px);
+  gap: clamp(9px, 1.8dvh, 16px);
+  animation: stageReveal 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes stageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Shared Frosted Obsidian Glass Surface */
@@ -109,7 +135,7 @@ body {
 .identity {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 
 .identity-row {
@@ -123,12 +149,12 @@ body {
   width: 56px;
   height: 56px;
   border-radius: var(--radius-icon);
-  border: 1px solid rgba(212, 175, 55, 0.28);
-  background: #090d16;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  background: #070b13;
   overflow: hidden;
   box-shadow:
-    inset 0 1px 0 rgba(245, 240, 230, 0.1),
-    0 8px 20px rgba(0, 0, 0, 0.5);
+    inset 0 1px 0 rgba(245, 240, 230, 0.12),
+    0 8px 22px rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -152,16 +178,17 @@ body {
 .brand-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.38rem, 6vw, 1.65rem);
+  font-size: clamp(1.36rem, 5.8vw, 1.64rem);
   font-weight: 900;
   line-height: 1.04;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
   color: var(--cream);
 }
 
 .brand-subtag {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.71rem;
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -170,8 +197,8 @@ body {
 
 .uvp {
   margin: 0;
-  font-size: clamp(0.84rem, 3.5vw, 0.92rem);
-  line-height: 1.35;
+  font-size: clamp(0.83rem, 3.4vw, 0.91rem);
+  line-height: 1.32;
   color: var(--slate);
   letter-spacing: 0.01em;
 }
@@ -186,9 +213,12 @@ body {
 
 .preview-img {
   width: 100%;
-  height: clamp(210px, 31dvh, 285px);
+  height: auto;
+  max-height: clamp(238px, 43dvh, 376px);
   display: block;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: top center;
+  background-color: #141414;
 }
 
 .telemetry-preview {
@@ -285,6 +315,7 @@ body {
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--emerald-hover) 0%, var(--emerald) 68%, var(--gold-light) 100%);
+  transition: width 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .progress-scale {
@@ -357,17 +388,44 @@ body {
   color: var(--slate);
 }
 
+.phase-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.phase-btn {
+  border: 1px solid rgba(212, 175, 55, 0.16);
+  background: rgba(5, 7, 12, 0.45);
+  color: var(--slate);
+  font-family: var(--font-ui);
+  font-size: 0.63rem;
+  font-weight: 600;
+  padding: 3px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 140ms ease, color 140ms ease, background-color 140ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.phase-btn.is-active {
+  color: var(--gold-light);
+  border-color: rgba(212, 175, 55, 0.45);
+  background: rgba(212, 175, 55, 0.14);
+}
+
 .telemetry-fcf {
   color: var(--emerald);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* 3. Smart OS-Aware CTA Stack */
 .cta-stack {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 9px;
 }
 
 .cta-buttons {
@@ -377,6 +435,8 @@ body {
 }
 
 .btn {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   min-height: 50px;
   padding: 12px 18px;
@@ -401,7 +461,8 @@ body {
 
 .btn:focus-visible,
 .waitlist-input:focus-visible,
-.btn-gold:focus-visible {
+.btn-gold:focus-visible,
+.phase-btn:focus-visible {
   outline: 2px solid var(--gold-light);
   outline-offset: 2px;
 }
@@ -409,17 +470,51 @@ body {
 .btn-primary {
   background-color: var(--emerald);
   color: var(--emerald-ink);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 10px 24px rgba(16, 185, 129, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 10px 26px rgba(16, 185, 129, 0.22);
+}
+
+/* Subtle single specular sheen sweep to draw first-second attention */
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.24) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: ctaSheen 1100ms ease-out 450ms 1 both;
+}
+
+@keyframes ctaSheen {
+  to {
+    left: 145%;
+  }
 }
 
 .btn-primary:hover {
   background-color: var(--emerald-hover);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 12px 26px rgba(5, 150, 105, 0.26);
+    0 12px 28px rgba(5, 150, 105, 0.28);
+}
+
+.btn-arrow {
+  display: inline-block;
+  font-weight: 800;
+  transition: transform 160ms ease;
+}
+
+.btn-primary:hover .btn-arrow {
+  transform: translateX(3px);
 }
 
 .btn-secondary {
@@ -505,6 +600,10 @@ body {
   background: rgba(5, 7, 12, 0.85);
 }
 
+.waitlist-input--invalid {
+  border-color: rgba(252, 165, 165, 0.65) !important;
+}
+
 .waitlist-input:disabled {
   opacity: 0.6;
 }
@@ -572,9 +671,13 @@ body {
 /* Ultra-Compact Mobile Viewport Safeguard (e.g. In-App Browsers <= 670px tall) */
 @media (max-height: 670px) {
   .stage {
-    gap: 8px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    gap: 7px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+
+  .preview-img {
+    max-height: 222px;
   }
 
   .telemetry-preview {
@@ -599,8 +702,22 @@ body {
 @media (min-width: 540px) {
   .stage {
     justify-content: center;
-    gap: 20px;
-    padding-top: 28px;
-    padding-bottom: 28px;
+    gap: 18px;
+    padding-top: 26px;
+    padding-bottom: 26px;
+  }
+}
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .btn-primary::after {
+    animation: none;
+  }
+
+  .btn,
+  .btn-arrow,
+  .progress-fill {
+    transition: none;
   }
 }

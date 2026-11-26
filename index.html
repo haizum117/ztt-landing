@@ -9,18 +9,29 @@
   <title>Economy Tycoon: Zero to Trillion — Macroeconomic Strategy &amp; Corporate Sandbox</title>
   <meta name="description" content="Economy Tycoon: Zero to Trillion — Macroeconomic Strategy &amp; Corporate Sandbox. Build conglomerates, manage SBLOC credit leverage, and navigate macroeconomic cycles.">
 
+  <!-- Warm TLS connection to Instant Web Sandbox for sub-second tap-to-play -->
+  <link rel="dns-prefetch" href="https://zero-to-trillion-rho.vercel.app">
+  <link rel="preconnect" href="https://zero-to-trillion-rho.vercel.app" crossorigin>
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Economy Tycoon: Zero to Trillion">
   <meta property="og:title" content="Economy Tycoon: Zero to Trillion — Macroeconomic Strategy &amp; Corporate Sandbox">
   <meta property="og:description" content="Build conglomerates, manage SBLOC credit leverage, and navigate macroeconomic cycles in an instant browser strategy sandbox.">
+  <meta property="og:image" content="/assets/og-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Economy Tycoon: Zero to Trillion gameplay and sovereign control room preview">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Economy Tycoon: Zero to Trillion — Macroeconomic Strategy &amp; Corporate Sandbox">
   <meta name="twitter:description" content="Build conglomerates, manage SBLOC credit leverage, and navigate macroeconomic cycles in an instant browser strategy sandbox.">
+  <meta name="twitter:image" content="/assets/og-preview.png">
 
-  <!-- Inline Geometric Monolith Favicon -->
+  <!-- App Icons & Inline SVG Fallback Favicon -->
+  <link rel="icon" type="image/webp" href="./assets/icon.webp">
+  <link rel="apple-touch-icon" href="./assets/icon.webp">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23090d16'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23d4af37' stroke-opacity='0.45' stroke-width='1.5'/%3E%3Cpolygon points='32,12 46,24 41,50 23,50 18,24' fill='%2310b981'/%3E%3Cpolygon points='32,12 46,24 32,32 18,24' fill='%23f5f0e6' fill-opacity='0.9'/%3E%3C/svg%3E">
 
   <link rel="stylesheet" href="./styles.css">
@@ -56,18 +67,15 @@
               </linearGradient>
             </defs>
             <rect width="56" height="56" rx="13" fill="url(#obsidianBase)" />
-            <!-- Orbital Vault Ring & Architectural Ticks -->
             <circle cx="28" cy="28" r="21" fill="none" stroke="#f5f0e6" stroke-opacity="0.16" stroke-width="1" />
             <circle cx="28" cy="28" r="16.5" fill="none" stroke="#10b981" stroke-opacity="0.32" stroke-width="0.9" stroke-dasharray="3 3" />
             <line x1="28" y1="5" x2="28" y2="8.5" stroke="#d4af37" stroke-opacity="0.6" stroke-width="1.1" />
             <line x1="28" y1="47.5" x2="28" y2="51" stroke="#d4af37" stroke-opacity="0.6" stroke-width="1.1" />
             <line x1="5" y1="28" x2="8.5" y2="28" stroke="#d4af37" stroke-opacity="0.6" stroke-width="1.1" />
             <line x1="47.5" y1="28" x2="51" y2="28" stroke="#d4af37" stroke-opacity="0.6" stroke-width="1.1" />
-            <!-- Geometric Vault Monolith -->
             <polygon points="28,12 39,22 35.5,43 20.5,43 17,22" fill="url(#emeraldFacet)" />
             <polygon points="28,28 39,22 35.5,43 28,43" fill="url(#emeraldShade)" />
             <polygon points="28,12 39,22 28,27.5 17,22" fill="#f5f0e6" />
-            <!-- Precision Vault Core -->
             <rect x="26.7" y="29.5" width="2.6" height="10" rx="1.3" fill="#06090f" />
             <circle cx="28" cy="20.5" r="2.2" fill="#06090f" />
           </svg>
@@ -79,6 +87,7 @@
             width="56"
             height="56"
             decoding="async"
+            fetchpriority="high"
             hidden
           >
         </div>
@@ -98,30 +107,33 @@
         id="preview-img"
         class="preview-img"
         src="./assets/preview.webp"
-        alt="Economy Tycoon: Zero to Trillion gameplay preview"
+        alt="Economy Tycoon: Zero to Trillion Sovereign Control Room gameplay preview"
+        width="496"
+        height="532"
         decoding="async"
+        fetchpriority="high"
         hidden
       >
 
       <div id="preview-fallback" class="telemetry-preview">
         <div class="telemetry-top">
-          <span class="telemetry-tag">SANDBOX TELEMETRY &bull; YR 14 Q3</span>
-          <span class="telemetry-cycle">EXPANSION</span>
+          <span id="telemetry-tag" class="telemetry-tag">SANDBOX TELEMETRY &bull; YR 14 Q3</span>
+          <span id="telemetry-cycle" class="telemetry-cycle">EXPANSION</span>
         </div>
 
         <div class="telemetry-primary">
           <div class="telemetry-primary-row">
             <span class="metric-label">CONSOLIDATED NET WORTH</span>
-            <span class="tier-badge">TIER IV &bull; CONGLOMERATE</span>
+            <span id="telemetry-tier" class="tier-badge">TIER IV &bull; CONGLOMERATE</span>
           </div>
-          <div class="net-worth-figure">$418.6B</div>
-          <div class="progress-wrap" aria-label="Progress toward one trillion net worth: 41.9 percent">
+          <div id="telemetry-networth" class="net-worth-figure">$418.6B</div>
+          <div class="progress-wrap" aria-label="Progress toward one trillion net worth">
             <div class="progress-track">
-              <div class="progress-fill" style="width: 41.9%;"></div>
+              <div id="telemetry-progress-fill" class="progress-fill" style="width: 41.9%;"></div>
             </div>
             <div class="progress-scale">
-              <span>$0</span>
-              <span class="progress-milestone">41.9% TO TRILLION</span>
+              <span>$1M</span>
+              <span id="telemetry-milestone" class="progress-milestone">41.9% TO TRILLION</span>
               <span>$1.0T</span>
             </div>
           </div>
@@ -132,19 +144,23 @@
         <div class="telemetry-metrics">
           <div class="metric-col">
             <span class="metric-label">SBLOC LEVERAGE</span>
-            <span class="metric-value">1.42x</span>
-            <span class="metric-sub">28% LTV &bull; AAA Covenant</span>
+            <span id="telemetry-leverage" class="metric-value">1.42x</span>
+            <span id="telemetry-leverage-sub" class="metric-sub">28% LTV &bull; AAA Covenant</span>
           </div>
           <div class="metric-col metric-col--bordered">
             <span class="metric-label">MACRO CYCLE</span>
-            <span class="metric-value metric-value--gold">Expansion</span>
-            <span class="metric-sub">Policy 3.25% &bull; CPI 2.1%</span>
+            <span id="telemetry-macro" class="metric-value metric-value--gold">Expansion</span>
+            <span id="telemetry-macro-sub" class="metric-sub">Policy 3.25% &bull; CPI 2.1%</span>
           </div>
         </div>
 
         <div class="telemetry-footer">
-          <span>4 Operating Subsidiaries</span>
-          <span class="telemetry-fcf">FCF +$14.8B / yr</span>
+          <div class="phase-switcher" role="tablist" aria-label="Preview simulation era">
+            <button type="button" class="phase-btn" role="tab" aria-selected="false" data-phase="seed">Yr 1 Seed</button>
+            <button type="button" class="phase-btn is-active" role="tab" aria-selected="true" data-phase="boom">Yr 14 Boom</button>
+            <button type="button" class="phase-btn" role="tab" aria-selected="false" data-phase="hegemon">Yr 30 Hegemon</button>
+          </div>
+          <span id="telemetry-fcf" class="telemetry-fcf">FCF +$14.8B/yr</span>
         </div>
       </div>
     </section>
@@ -164,6 +180,7 @@
             </svg>
           </span>
           <span id="primary-cta-label">Play Instant Web Sandbox</span>
+          <span class="btn-arrow" aria-hidden="true">&rarr;</span>
         </a>
 
         <a
@@ -190,6 +207,7 @@
             type="email"
             name="email"
             inputmode="email"
+            enterkeyhint="send"
             autocomplete="email"
             placeholder="Notify me for iOS App Store"
             required

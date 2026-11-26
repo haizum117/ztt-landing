@@ -1,11 +1,12 @@
-Assets Drop-In Folder
-=====================
+Assets Folder
+=============
 
-Drop optional WebP images into this directory to automatically replace the
-built-in SVG/CSS visuals with zero code changes:
+Active visual assets served directly by the landing page:
 
-- icon.webp    -> Replaces the inline SVG app icon (recommended: 256x256px WebP, < 25 KB)
-- preview.webp -> Replaces the coded macroeconomic telemetry preview card (recommended: 720x420px WebP, < 80 KB)
+- icon.webp       -> App icon on dark obsidian backdrop (auto-replaces built-in SVG emblem)
+- preview.webp    -> In-game Sovereign Control Room preview (auto-replaces coded telemetry fallback)
+- og-preview.png  -> 1200x630 Open Graph / Twitter Card share banner
 
-If either file is absent or fails to load, the page seamlessly retains its
-lightweight built-in SVG/CSS fallback visuals.
+To update any visual, simply overwrite the file with the same filename.
+If icon.webp or preview.webp is removed, the page automatically falls back
+to its built-in SVG/CSS visuals.

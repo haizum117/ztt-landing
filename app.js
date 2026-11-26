@@ -3,6 +3,7 @@
 
   const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
   const UTM_STORAGE_KEY = "ztt_utm_attribution_v1";
+  const WAITLIST_JOINED_KEY = "ztt_waitlist_joined_v1";
 
   const DEFAULT_CONFIG = {
     WEB_SANDBOX_URL: "https://zero-to-trillion-rho.vercel.app/",
@@ -14,6 +15,48 @@
   };
 
   const config = Object.assign({}, DEFAULT_CONFIG, window.ZTT_CONFIG || {});
+
+  const TELEMETRY_PHASES = {
+    seed: {
+      tag: "SANDBOX TELEMETRY • YR 1 Q2",
+      cycle: "RECOVERY",
+      tier: "TIER I • FOUNDER",
+      netWorth: "$18.4M",
+      progress: "1.8%",
+      milestone: "1.8% TO TRILLION",
+      leverage: "0.45x",
+      leverageSub: "12% LTV • Seed Line",
+      macro: "Recovery",
+      macroSub: "Policy 2.50% • CPI 1.8%",
+      fcf: "FCF +$4.2M/yr",
+    },
+    boom: {
+      tag: "SANDBOX TELEMETRY • YR 14 Q3",
+      cycle: "EXPANSION",
+      tier: "TIER IV • CONGLOMERATE",
+      netWorth: "$418.6B",
+      progress: "41.9%",
+      milestone: "41.9% TO TRILLION",
+      leverage: "1.42x",
+      leverageSub: "28% LTV • AAA Covenant",
+      macro: "Expansion",
+      macroSub: "Policy 3.25% • CPI 2.1%",
+      fcf: "FCF +$14.8B/yr",
+    },
+    hegemon: {
+      tag: "SOVEREIGN CONTROL • YR 30 Q4",
+      cycle: "STAGFLATION",
+      tier: "TIER VI • HEGEMON",
+      netWorth: "$1.49T",
+      progress: "100%",
+      milestone: "100% GOAL REACHED",
+      leverage: "1.85x",
+      leverageSub: "31% LTV • Sovereign Tier",
+      macro: "Tightening",
+      macroSub: "Policy 10.25% • INF 10.2%",
+      fcf: "Cash $52.4B",
+    },
+  };
 
   /**
    * Detect visitor OS: "android", "ios" (including iPadOS), or "desktop".
@@ -101,6 +144,22 @@
   function persistUtmParams(utms) {
     try {
       window.sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(utms));
+    } catch (_) {
+      // Ignore storage restrictions in strict private WebViews.
+    }
+  }
+
+  function hasJoinedWaitlist() {
+    try {
+      return window.localStorage.getItem(WAITLIST_JOINED_KEY) === "1";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function markWaitlistJoined() {
+    try {
+      window.localStorage.setItem(WAITLIST_JOINED_KEY, "1");
     } catch (_) {
       // Ignore storage restrictions in strict private WebViews.
     }
@@ -212,6 +271,54 @@
     });
 
     imgEl.addEventListener("error", keepFallback);
+  }
+
+  /**
+   * Interactive 3-era telemetry switcher on the coded fallback card.
+   */
+  function setupPhaseSwitcher() {
+    const buttons = document.querySelectorAll(".phase-btn[data-phase]");
+    if (!buttons || !buttons.length) return;
+
+    const els = {
+      tag: document.getElementById("telemetry-tag"),
+      cycle: document.getElementById("telemetry-cycle"),
+      tier: document.getElementById("telemetry-tier"),
+      netWorth: document.getElementById("telemetry-networth"),
+      fill: document.getElementById("telemetry-progress-fill"),
+      milestone: document.getElementById("telemetry-milestone"),
+      leverage: document.getElementById("telemetry-leverage"),
+      leverageSub: document.getElementById("telemetry-leverage-sub"),
+      macro: document.getElementById("telemetry-macro"),
+      macroSub: document.getElementById("telemetry-macro-sub"),
+      fcf: document.getElementById("telemetry-fcf"),
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.dataset.phase;
+        const data = TELEMETRY_PHASES[key];
+        if (!data) return;
+
+        buttons.forEach((b) => {
+          const active = b === btn;
+          b.classList.toggle("is-active", active);
+          b.setAttribute("aria-selected", active ? "true" : "false");
+        });
+
+        if (els.tag) els.tag.textContent = data.tag;
+        if (els.cycle) els.cycle.textContent = data.cycle;
+        if (els.tier) els.tier.textContent = data.tier;
+        if (els.netWorth) els.netWorth.textContent = data.netWorth;
+        if (els.fill) els.fill.style.width = data.progress;
+        if (els.milestone) els.milestone.textContent = data.milestone;
+        if (els.leverage) els.leverage.textContent = data.leverage;
+        if (els.leverageSub) els.leverageSub.textContent = data.leverageSub;
+        if (els.macro) els.macro.textContent = data.macro;
+        if (els.macroSub) els.macroSub.textContent = data.macroSub;
+        if (els.fcf) els.fcf.textContent = data.fcf;
+      });
+    });
   }
 
   /**
@@ -372,11 +479,34 @@
       statusEl.hidden = !message;
     };
 
+    const setJoinedUI = () => {
+      input.value = "";
+      input.disabled = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Joined";
+      setStatus("You're on the iOS waitlist. We'll notify you at launch.", "success");
+    };
+
+    if (hasJoinedWaitlist()) {
+      setJoinedUI();
+      return;
+    }
+
+    input.addEventListener("input", () => {
+      if (input.classList && input.classList.contains("waitlist-input--invalid")) {
+        input.classList.remove("waitlist-input--invalid");
+        setStatus("", "");
+      }
+    });
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const email = input.value.trim();
       if (!isValidEmail(email)) {
+        if (input.classList) {
+          input.classList.add("waitlist-input--invalid");
+        }
         setStatus("Please enter a valid email address.", "error");
         input.focus();
         return;
@@ -389,6 +519,9 @@
       }
 
       setStatus("", "");
+      if (input.classList) {
+        input.classList.remove("waitlist-input--invalid");
+      }
       input.disabled = true;
       submitBtn.disabled = true;
       const originalLabel = submitBtn.textContent;
@@ -410,10 +543,9 @@
       const submitted = await postWaitlistPayload(webhookUrl, payload);
 
       if (submitted) {
+        markWaitlistJoined();
         trackEvent("ios_waitlist_submit", utms, detectedOS);
-        input.value = "";
-        submitBtn.textContent = "Joined";
-        setStatus("You're on the iOS waitlist. We'll notify you at launch.", "success");
+        setJoinedUI();
       } else {
         input.disabled = false;
         submitBtn.disabled = false;
@@ -443,6 +575,7 @@
       document.getElementById("preview-fallback")
     );
 
+    setupPhaseSwitcher();
     setupCtaStack(detectedOS, utms);
     setupWaitlist(detectedOS, utms);
   }
